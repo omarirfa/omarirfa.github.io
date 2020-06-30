@@ -8,4 +8,181 @@ background: '/img/bg-jobs.jpg'
 
 <p> Due to the COVID-19 pandemic, <a href="https://www.nytimes.com/interactive/2020/05/08/business/economy/april-jobs-report.html" style="color:blue">unemployment</a> level is on the rise. However, even during these troubling times, the amount of fake job postings have also increased in <a href="https://globalnews.ca/news/7046534/scammers-target-online-job-seekers-during-covid-19-pandemic/" style="color:blue">Canada</a> and in <a href="https://www.forbes.com/sites/ashleystahl/2020/05/11/job-hunting-scams-amid-covid-19-pandemic/#694498c3c57d" style="color:blue">North America</a> as a whole. This project aims to create a classification model to help users identify fraudulent job postings and provide valuable insights on how a fake job posting looks like.</p>
 
+<h2> Objectives </h2>
+<ul> 
+ <li>Devise a method to combine all the useful columns.</li>
+ <li>Create a classification model to differentiate between fraudulent and real jobs.</li>
+ <li>Produce insights on how fake jobs differ from real job postings. </li>
+</ul>
+
+
+<h2> Dataset </h2>
+<p>The <a href="https://www.kaggle.com/shivamb/real-or-fake-fake-jobposting-prediction" style="color:blue">dataset</a> is available on Kaggle. It contains 18K job postings where 866 are fake job postings and 17014 are real job postings. 0 represents real job postings and 1 represents fake job postings.</p>
+
+
+<h2> Libraries </h2>
+To make this project work we need:
+<ul>
+<li> <a href="https://pandas.pydata.org/" style="color:blue">Pandas</a> - input data analysis and manipulation tool.</li>
+<li> <a href="https://numpy.org/" style="color:blue">NumPy</a> - further data manipulation and conversion.</li>
+<li><a href="https://scikit-learn.org/" style="color:blue">Scikit-learn</a> - contains machine learning models, feature extraction and metrics for evaulation.</li>
+<li> <a href="https://github.com/gaganmanku96/nlppreprocess" style="color:blue">Nlppreprocess</a> - removing stopwords, punctuation and more from the input data.</li>
+<li> <a href="https://matplotlib.org/" style="color:blue">Matplotlib</a> - creating static graphs.</li>
+<li> <a href="https://seaborn.pydata.org/" style="color:blue">Seaborn</a> - drawing more creative graphs.</li>
+</ul>
+
+
+<h2> Method </h2>
+Method can be divided into three stages:
+<ul>
+<li> Preprocessing: NaN values were replaced with blanks. Since we wanted to evaluate the different aspects of a job posting, a new column was created which consists of the title, location, company profile, description, requirements and benefits. Since it is an imbalanced dataset, undersampling was utilized for the majority class (real jobs) to balance out against the minority class (fake jobs). A train and test split was done on the texts to create training and testing sets.</li>
+<li> Since machine learning models can only process numerical data, we have to convert the input text. To do so Term frequency-inverse document frequency (TFIDF) vectorizer was utilized to create training and testing vectors. Countvectorizer was not used since it only counts the number of times a word appears in the document which will skew the results. While, TFIDF sees the overall document weightage of each word.</li>
+<li> Models: Multinomial Naive-Bayes, RandomForest, Logistic Regression and Support Vector machine were utilized to evaluate the set. F1 score was utilized to determine the efficiency of each model.</li>
+<li> Visualisation: Confusion matrix were made for each model to show how effectively did it classify. Graphs were made for required experience, function, industry, employment type, countries, and required education. NA was replaced for NaN values for better visualisation.</li>
+</ul>
+
+
+<p>Please refer to the results folder for insights and metrics utilized.</p>
+
+<h2>Improvements</h2>
+This project can be improved in several ways, in terms of data preprocessing, data visualisation and models.
+<ul>
+<li>Data Preprocessing: <a href="https://pypi.org/project/gensim/" style="color:blue">Gensim</a>, <a href="https://spacy.io/" style="color:blue">SpaCy</a> or <a href="https://www.nltk.org/" style="color:blue">NLTK</a> can be utilized for stopword removal as well as stemming or lemmatizing. To deal with imbalanced datasets, data augmentation <a href="https://towardsdatascience.com/data-augmentation-in-nlp-2801a34dfc28" style="color:blue">techniques</a> can be used. Rather than performing data augmentation, libraries such as <a href="https://imbalanced-learn.readthedocs.io/en/stable/" style="color:blue">Imbalanced-learn</a> allows to undersample, oversample, SMOTE and other techniques to deal with imbalanced datasets instead. Other methods can be used to convert text data into vectors such as Word2vec, Bag of words or Co-occurrence vector.</li>
+<li>Models: Machine learning models can be finetuned more using rfgridsearch or through trial and error. Other models like LSTM could have been utilized.</li>
+<li>Data Visualisation: Libraries like <a href="https://plotly.com/" style="color:blue">Plotly</a> or <a href="https://docs.bokeh.org/en/latest/index.html" style="color:blue">Bokeh</a> can be used to make interactive plots.</li>
+</ul>
+
+   
+<h2>Graphs</h2>
+You can zoom in on the graphs by hovering over them. <b>Note: NA roles indicate NaN values where the person has not provided a role in the posting.</b> Some of the graphs show:
+
+<ul>
+<li>Country wise job postings shows the top 11 countries where jobs have been posted. The most jobs have been posted in US, Great Britain and Greece.</li>
+<li>Fraudulence distribution based on employment type reveals the different employment types (Other, Full-time, NA, Part-time, Contract and Temporary) that were analyzed. Fraudulent jobs were found mainly for Full-time, NA and part-time roles. </li>
+<li>Jobs posted based on required experience underlines the required experience (Internship, Not Applicable, NA, Mid-Senior level, Associate, Entry level, Executive and Director) for jobs posted. Fraudulent jobs were mainly targeted for NA, Entry level and Mid-Senior level.</li>
+<li>Jobs posted based on function outlines jobs based on the job function. Most fraudulent jobs were under the function NA, Administrative and Engineering.</li>
+<li>Jobs posted based on industry showcases industries with real and fraudulent job postings. Fraudulent jobs were mostly listed for industries like NA, Oil & Energy and Hospital & Health Care.</li>  
+<li>Jobs posted based on required education highlights the required education needed for jobs. Fraudulent jobs usually required NA, high school or equivalent and bachelors degree.</li>  
+<li>Imbalanced job postings emphasizes that the dataset is highly imbalanced. There are more real job postings as compared to fake jobs.</li>
+</ul>  
+   
+   
+<div class="row">
+  <div class="column zoom">
+    <img src="/img/country-wise-jobs.png" alt="countrygraph" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/fraud-based-on-employment-type.png" alt="employmentgraph" style="width:100%">
+  </div>
+  <div class="column zoom2">
+    <img src="/img/fraud-based-on-required-experience-type.png" alt="fraudvexpgraph" style="width:100%">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column zoom2">
+    <img src="/img/fraud-based-on-function-type.png" alt="fraudvfunction" style="width:100%">
+  </div>
+  <div class="column zoom3">
+    <img src="/img/fraud-based-on-industry-type.png" alt="fraudvindustry" style="width:100%">
+  </div>
+  <div class="column zoom2">
+    <img src="/img/fraud-based-on-required-education-type.png" alt="fraudvedugraph" style="width:100%">
+  </div>
+</div>
+
+
+<div class="aligncenter zoom">
+    <img src="/img/imbalanced-dataset.png" alt="imbalancedds" style="width:33.33%">
+  </div>
+
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 500px) {
+  .column {
+    width: 100%;
+  }
+}
+
+
+.aligncenter {
+    text-align: center;
+}
+
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  box-sizing: border-box;
+}
+.zoom2 {
+  padding: 50px;
+  background-color: green;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.zoom2:hover {
+  -ms-transform: scale(3); /* IE 9 */
+  -webkit-transform: scale(3); /* Safari 3-8 */
+  transform: scale(3); 
+}
+
+  box-sizing: border-box;
+.zoom {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom:hover {
+  -ms-transform: scale(2.5); /* IE 9 */
+  -webkit-transform: scale(2.5); /* Safari 3-8 */
+  transform: scale(2.5); 
+}
+
+  box-sizing: border-box;
+.zoom3 {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom3:hover {
+  -ms-transform: scale(5); /* IE 9 */
+  -webkit-transform: scale(5); /* Safari 3-8 */
+  transform: scale(5); 
+}
+</style>
+</head>
+
+
+
 <p>For more information please refer to the <a href="https://github.com/omarirfa/Fake-Job-Postings" style="color:blue">Github.</a> </p>
