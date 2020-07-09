@@ -6,6 +6,272 @@ date: 2020-01-14
 background: '/img/bg-autotumor.jpg'
 ---
 
-<p>Brain tumor identification is a very tricky process which is usually done by invasive procedures such as a biopsy or via a blood test. With the boom in MRI imaging, doctors rely on manual interpretations from radiologists to accurately identify the tumor. There have been several softwares such as ITK SNAP or 3D slicer proposed to help radiologists identify tumors faster and more accurately. However, current manual approaches are still slow as compared to automatic brain tumor detection methods.</p>
+<p>Brain tumor identification is a very tricky process which is usually done by invasive procedures such as a biopsy or via a blood test. With the boom in MRI imaging, doctors rely on manual interpretations from radiologists to accurately identify the tumor. There have been several softwares such as ITK SNAP or 3D slicer proposed to help radiologists identify tumors faster and more accurately. However, current manual approaches are still slow as compared to automatic brain tumor detection methods. Needless to say, even though applications
+have been developed to make manual segmentation a bit faster, the fact still remains that MRI images are still subject to <a href="https://pubmed.ncbi.nlm.nih.gov/10069728/" style="color:blue">intra and inter rater variability.</a></p>
+
+<p>Intra rater reliability is used to determine how consistent an individual is at measuring
+tumors, while inter rater reliability describes how various individuals are at
+identifying the tumor region. There are several factors that may affect intra rater reliability
+such as time, experience and the condition of the person. Some practitioners
+require more time for identifying the tumor as it may help the examiner focus more
+and not rush through the anomalies. </p>
+
+<p>In contrast, inter rater reliability is a metric used to determine the extent to
+which multiple examiners agree on the location of the tumor. The degree to which
+they will agree determines the reliability of the score. This metric allows us to impose
+level of objectivity, provides validation of evaluation results and increases confidence
+that examiners are following the proper guidelines in identifying a tumor. </p>
+
+
+<h2>Thesis statement </h2>
+<p>Brain MRI image interpretation is a laborious task for radiologists and doctors. The
+current approaches that are being widely used in hospitals include, purely manual
+interpretation and manual interpretation supported by digital image processing.
+In a purely manual process, doctors conduct visual interpretation on each single
+slice and circulate the slices among them. Visual interpretation is a tedious task,
+which is labor intensive and time consuming. A patient may miss the most suitable
+time for treatment because of delay in interpreting their brain images. An additional disadvantage of the purely manual interpretation is caused by subjectiveness. Limitation in human knowledge and experience often result in errors in brain image interpretation. </p>
+
+<p>My research is aimed at developing a hybrid unsupervised image processing technique
+to detect tumors in brain MRI images automatically. It is a classification technique
+to classify high grade gliomas (HGG) and low grade gliomas (LGG) areas from normal areas, instead of a segmentation technique to segment
+an image into different unlabelled areas. The technique is designed to provide
+accurate tumor information in a timely manner. The technique does not require human
+involvement, therefore processing can be conducted automatically and efficiency
+can be significantly improved. This technique integrates the techniques of hierarchical
+density based spatial clusterings of applications with noises (HDBSCAN), which is
+a density based clustering algorithm and thresholding to overcome the limitations of
+individual techniques. Thresholding is the most basic way to segment images. This is
+usually done using a grayscale image to create binary images for objects of interest. </p>
+
+<h2> Objectives </h2>
+<ul> 
+ <li>Devise a hybrid algorithm  to differentiate between HGG and LGG tumors.</li>
+ <li>Create a classification model to differentiate between tumors and normal brain scans.</li>
+ <li>Produce insights on how normal brain differ from tumors. </li>
+ <li>Design a method to acheive higher accuracy in a short period of time.</li>
+</ul>
+
+<h2> Dataset </h2>
+<p>There were two datasets utilized for this experiments. The <a href="https://www.med.upenn.edu/sbia/brats2018/data.html" style="color:blue">BraTS 2018 dataset</a> is contains axial views of the brains in different modalities along with their ground truths. The <a href="https://www.kaggle.com/navoneel/brain-mri-images-for-brain-tumor-detection" style="color:blue">Brain tumor public dataset</a> contains normal images for comparison to  </p>
+
+
+<h2>MRI Images</h2>
+<p>The first image shows a T2 slice and noise that is usually added after taking an MRI. The noise is not visible in FLAIR images due to contrast difference. The second image shows the inter rater reliability comparison between experts and novices. There are quite different opinions between where the tumor is located.</p>
+
+<div class="row2">
+  <div class="column2 zoom" id="demobox">
+    <img src="/img/brainnoise.png" alt="brainnoise" style="width:100%">
+  </div>
+  <div class="column2 zoom">
+    <img src="/img/4intra.png" alt="intraratervariability" style="width:100%">
+  </div>
+</div>
+
+
+<h2>Libraries required</h2>
+
+<ul>
+<li> <a href="https://pandas.pydata.org/" style="color:blue">Pandas</a> - input data analysis and manipulation tool.</li>
+<li> <a href="https://numpy.org/" style="color:blue">NumPy</a> - further data manipulation and conversion.</li>
+<li> <a href="https://scikit-learn.org/" style="color:blue">Scikit-learn</a> - contains machine learning models, feature extraction and metrics for evaulation.</li>
+<li> <a href="https://simpleitk.readthedocs.io/en/master/gettingStarted.html#python-binary-files" style="color:blue">SimpleITK</a> - contains various filters and helps in separating MRI slices for processing.</li>
+<li> <a href="https://nipy.org/nibabel/" style="color:blue">Nibabel</a> - required for reading MRI images which are NifTI files.</li>
+<li> <a href="https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html" style="color:blue">HDBSCAN</a> - is a hierarchical clustering algorithm that differentiates outliers from points of interest.</li>
+<li> <a href="https://matplotlib.org/" style="color:blue">Matplotlib</a> - creating static graphs.</li>
+<li> <a href="https://seaborn.pydata.org/" style="color:blue">Seaborn</a> - drawing more creative graphs.</li>
+</ul>
+
+<h2>Method</h2>
+
+<ul>
+<li>Preprocessing: To reduce image biases and noises, we apply an <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071855/" style="color:blue">N4 bias filter</a> and a smoothing/denoising filter.</li>
+<li>Clustering: To cluster the MRI scan, we use one of the clustering algorithms such as HDBSCAN. Clustering algorithms such as K-Means, Meanshift, DBSCAN and Agglomerative clustering were used for comparison.</li>
+<li>Thresholding: The clustered image is passed into a thresholding filter to determine if the image contains a tumor.</li>
+<li>Evaluation and Analysis: After thresholding, the image is passed into several external and internal cluster metrics such as silhouette score, calinski harabasz score, precision, recall, accuracy and F1 score.</li>
+</ul>
+
+
+<h2>Results</h2>
+<p>The first set of images shows a LGG going through filtering/denoising, HDBSCAN image reconstruction and thresholding. The same process is applied to the HGG (2nd set of images) and the normal brain image (3rd set of images). </p>
+<div class="row">
+  <div class="column zoom">
+    <img src="/img/smoothfilterAAP.png" alt="smoothfilterAAP" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/hdbscanminclust30tumorimage-slice077.png" alt="hdbscanminclust30tumorimage-slice077" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/threshtumorimage-slice077.png" alt="threshtumorimage-slice077" style="width:100%">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column zoom">
+    <img src="/img/smoothfilterTCIA109.png" alt="smoothfilterTCIA109" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/hdbscanminclust30tumorimage-slice084.png" alt="hdbscanminclust30tumorimage-slice084" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/threshtumorimage-slice084.png" alt="threshtumorimage-slice084" style="width:100%">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column zoom">
+    <img src="/img/21_no.jpg" alt="normalbrain" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/hdbscanminclust30normalbrain21.png" alt="hdbscannormalbrain" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/threshnormalbrain21.png" alt="threshnormalbrain" style="width:100%">
+  </div>
+</div>
+
+
+<p> To avoid normal images being misclassified mainly due to ventricles a contour is set up to identify areas that have similar grey values to tumors. Final accuracy, time elapsed, precision, recall and F1 score are shown below. Since HDBSCAN can identify outliers with ease, it has a significant advantage over the rest of the algorithms. </p>
+<div class="row">
+  <div class="column zoom">
+    <img src="/img/contournormalbrain.png" alt="contournormal" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/precisrecf1.png" alt="precisrecf1" style="width:100%">
+  </div>
+  <div class="column zoom">
+    <img src="/img/finalaccuracy.png" alt="finalaccuracy" style="width:100%">
+  </div>
+</div>
+
+
+ 
+  
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 500px) {
+  .column {
+    width: 100%;
+  }
+}
+
+
+.aligncenter {
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+.row2 {
+  display: flex;
+}
+
+/* Create three equal columns that sits next to each other */
+.column2 {
+  flex: 50%;
+  padding: 5px;
+}
+
+
+
+.aligncenter2 {
+    text-align: center;
+}
+#demobox {
+  background-color: #FFFAFA;
+  padding: 10px ;
+  
+} 
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  box-sizing: border-box;
+}
+.zoom2 {
+  padding: 50px;
+  background-color: green;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.zoom2:hover {
+  -ms-transform: scale(3); /* IE 9 */
+  -webkit-transform: scale(3); /* Safari 3-8 */
+  transform: scale(3); 
+}
+
+  box-sizing: border-box;
+.zoom {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom:hover {
+  -ms-transform: scale(2.5); /* IE 9 */
+  -webkit-transform: scale(2.5); /* Safari 3-8 */
+  transform: scale(2.5); 
+}
+
+  box-sizing: border-box;
+.zoom3 {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom3:hover {
+  -ms-transform: scale(5); /* IE 9 */
+  -webkit-transform: scale(5); /* Safari 3-8 */
+  transform: scale(5); 
+}
+</style>
+</head>
+
+
+
+
+
+
+
+
+
+
 
 <p>For more information please refer to the <a href="https://github.com/omarirfa/Hybrid-Unsupervised-Classification-Technique-for-Automatic-Brain-MRI-Tumor-Recognition" style="color:blue">Github.</a> </p>
