@@ -1,0 +1,148 @@
+---
+layout: post
+title: "Emoto"
+#subtitle: ""
+date: 2020-08-13 
+background: '/img/bg-senti2.jpg'
+---
+
+<p><a href="https://play.google.com/store/apps/details?id=emoto_setup.example.recommender_app&hl=en_CA" style="color:blue">Emoto</a> is an android application that functions as your day to day personal diary. The android application is the client that sends the diary content posted by the user to the Amazon EC2 cloud which hosts flask file and machine learning models. The flask file takes the input request sends it to the machine learning model for prediction and it sends the response as happy, neutral or sad back to the client. The app was created to boost mental health of the users. It gives them a good perspective of their mental emotion everyday. This way users can understand them and be able to adjust their lifestyle. Example: Form good habits, Practice self-care, etc.</p>
+
+<p> Collaborated with selvans who is another talented developer who you can check out <a href="https://www.linkedin.com/in/tamizhselvan-venkatesan/" style="color:blue">here. </a></p>
+
+
+<h2>Libraries</h2>
+Some of the tools required to make this project work:
+<ul>
+<li> <a href="https://pandas.pydata.org/" style="color:blue">Pandas</a> - input data analysis and manipulation tool.</li>
+<li> <a href="https://numpy.org/" style="color:blue">NumPy</a> - further data manipulation and conversion.</li>
+<li> <a href="https://www.tensorflow.org/" style="color:blue">Tensorflow</a> - contains tools to create different neural networks and metrics. </li>
+<li> <a href="https://spacy.io/" style="color:blue">SpaCy</a> - removing stopwords, punctuation and more from the input data.</li>
+<li> <a href="https://matplotlib.org/" style="color:blue">Matplotlib</a> - creating static graphs.</li>
+<li> <a href="https://nlp.stanford.edu/projects/glove/#:~:text=Introduction,of%20the%20word%20vector%20space." style="color:blue">GloVe</a> - contains word embeddings which is used in the embedding layer.</li>
+<li> <a href="https://www.nginx.com/" style="color:blue">Nginx</a> - load balancer to handle the amount of GET and POST requests. </li>
+<li> <a href="https://gunicorn.org/" style="color:blue">Gunicorn</a> - worker application that runs in the background so the flask file can always listen for requests. </li>
+</ul>
+
+<h2>Method</h2>
+<ul>
+<li>Preprocessing: The <a href="https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews" style="color:blue">IMBD movie dataset</a> was utilized for training the model. It contains 50K movie reviews, where 25k are positive reviews and 25k are negative reviews. Also the <a href="https://www.kaggle.com/kazanova/sentiment140" style="color:blue">Twitter sentiment analysis</a> dataset was used alongside the IMDB dataset. Preprocessing was required to remove alot of the stopwords, punctuation, html tags and lemmatization was carried out. </li>
+<li>Model: An LSTM was chosen as our intial model which was utilized along with an embedding layer from GloVe. Several parameters like earlystopping, model checkpoint and accuracy were used. <a href="https://github.com/google-research/bert" style="color:blue">BERT</a> (Bidirectional Encoder Representations from Transformers) was used as well to experiment how it performs but unfortunately, due to lack of computational resources the model could not be properly trained. Instead <a href="https://github.com/cjhutto/vaderSentiment" style="color:blue">VADER</a> (Valence Aware Dictionary and sEntiment Reasoner) was utilized which allows users to use emojis in the journal.</li>
+<li>Application development: The application was developed using android studio and was made with adherence to the Google Material Design Guidelines. </li>
+<li>Model deployment: The model along with the flask file were deployed on AWS EC2. The mobile application acts as a client while the flask file provides RESTFUL API services in the cloud. All the data is stored locally using SQLite.</li>
+</ul>
+
+
+
+<h2>Flowchart & Walkthrough</h2>
+You can hover over the flowchart to zoom in.
+
+<div class="row">
+  <div class="column zoom" id="demobox">
+    <img src="/img/flowchartaws.png" alt="awsflowchart" style="width:100%">
+  </div>
+  <div class="column">
+    <img src="/img/emotogif.gif" alt="walkthroughh" style="width:100%">
+  </div>
+</div>
+
+
+
+<h2>Compatibility</h2>
+
+<p> The android application currently supports Oreo (Android 8.0+) and Pie (Android 9.0+) versions. </p>
+
+
+<h2>Updates</h2>
+<ul>
+<li>The model needs to be fine-tuned for improved precision towards analyzing the sentiment of the text.</li>
+<li>Graph and Charts for visualizing deeper sentiment trends have to be developed.</li>
+<li>Backward compatibility of the application can be improved.</li>
+<li>WorkManager class needs to be added to provide support for reminder.</li>
+<li>Need to move the database online via AWS Aurora or AWS Redshift </li>
+</ul>
+
+<p>You can download <a href="https://play.google.com/store/apps/details?id=emoto_setup.example.recommender_app&hl=en_CA" style="color:blue">Emoto</a> on Google Play and tell us your thoughts! More info on <a href="https://github.com/omarirfa/Senti_AI" style="color:blue">Github. </a></p>
+
+
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+}
+
+/* Create three equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 5px;
+}
+
+
+
+.aligncenter {
+    text-align: center;
+}
+#demobox {
+  background-color: #FFFAFA;
+  padding: 10px ;
+  
+} 
+	
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  box-sizing: border-box;
+}
+.zoom2 {
+  padding: 50px;
+  background-color: white;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.zoom2:hover {
+  -ms-transform: scale(3); /* IE 9 */
+  -webkit-transform: scale(3); /* Safari 3-8 */
+  transform: scale(3); 
+}
+
+  box-sizing: border-box;
+.zoom {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom:hover {
+  -ms-transform: scale(2.5); /* IE 9 */
+  -webkit-transform: scale(2.5); /* Safari 3-8 */
+  transform: scale(2.5); 
+}
+
+  box-sizing: border-box;
+.zoom3 {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom3:hover {
+  -ms-transform: scale(5); /* IE 9 */
+  -webkit-transform: scale(5); /* Safari 3-8 */
+  transform: scale(5); 
+}
+</style>
+</head>
