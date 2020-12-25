@@ -1,0 +1,118 @@
+---
+layout: post
+title: "ServiceOntario wait times"
+#subtitle: ""
+date: 2020-11-15 
+background: '/img/queuewait.jpg'
+---
+
+<p>ServiceOntario releases their wait times and updates it quarterly. I analyzed one of their <a href="https://data.ontario.ca/dataset/serviceontario-wait-times-and-call-volumes-contact-centres" style="color:blue">datasets</a> which shows wait times and call volumes for contact centres. This dataset contains entries in terms of business queries, calls handled, average wait time, year and month. The data spans from 2016 to 2020 at the moment. To analyze the dataset I utilized <a href="https://powerbi.microsoft.com/en-us/" style="color:blue">Power BI</a> which is a business analytics tool that allows to create interactive visualizations.</p>
+
+<p>Unfortunately, the dashboard may become unavailable since Power BI requires an organizational account. I have attached both Power BI and a pdf version of the report in my <a href="https://github.com/omarirfa/ServiceOntario-wait-times" style="color:blue">Github.</a> which you can check out.</p>
+
+
+<h2>Objectives</h2>
+<ul>
+<li>Devise a method to establish month and year relationship with the Power BI date format.</li>
+<li>Create a model to show how ServiceOntario has catered to different business through out the years in terms of wait time and calls handled. </li>
+<li>Produce insights on how average wait times varied for various businesses.</li>
+</ul>
+
+<h2>Method</h2>
+<p>The excel file was loaded in and transformed using Power Query. First thing to do was to remove whitespaces, trim the data and change the data type for each column to their specific data types such as text, whole number etc. An issue that I addressed in Power Query was to make a date and month order column. Power BI organizes months in ascending order which makes the visualizations look odd. There are several ways to fix this but I decided to use this way, I made a new column using the calendar function and changed its data type to date. Then made a second column called monthorder which I then to set to as wholenumber. This column chronologically assigned numerical values to their respective months i.e. January == 1, February == 2 etc. Finally, to implement these changes we just had to sort the columns in our report tab by monthorder. Another way of doing this is by just using the calendar function in Power Query to create a column and assigning the calendar as a relationship to the month.</p>
+
+
+<p> Powerbi pdf:
+<embed src="/img/serviceontariowaittimes.pdf" type="application/pdf" width="800" height="800" /> </p>
+
+<h2>Improvements</h2>
+<ul>
+<li>Can make predictions using Azures machine learning integration which is provided in Power Query.</li>
+<li>Further plots could be made using R or Python scripts.</li>
+<li>More relationships can be made with other applicable datasets from the ServiceOntario website.</li>
+</ul>
+
+<p>You can learn more about the project on <a href="https://github.com/omarirfa/ServiceOntario-wait-times" style="color:blue">Github.</a></p>
+
+
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+}
+
+/* Create three equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 5px;
+}
+
+
+
+.aligncenter {
+    text-align: center;
+}
+#demobox {
+  background-color: #FFFAFA;
+  padding: 10px ;
+  
+} 
+	
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  box-sizing: border-box;
+}
+.zoom2 {
+  padding: 50px;
+  background-color: white;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.zoom2:hover {
+  -ms-transform: scale(3); /* IE 9 */
+  -webkit-transform: scale(3); /* Safari 3-8 */
+  transform: scale(3); 
+}
+
+  box-sizing: border-box;
+.zoom {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom:hover {
+  -ms-transform: scale(2.5); /* IE 9 */
+  -webkit-transform: scale(2.5); /* Safari 3-8 */
+  transform: scale(2.5); 
+}
+
+  box-sizing: border-box;
+.zoom3 {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom3:hover {
+  -ms-transform: scale(5); /* IE 9 */
+  -webkit-transform: scale(5); /* Safari 3-8 */
+  transform: scale(5); 
+}
+</style>
+</head>
