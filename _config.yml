@@ -4,7 +4,7 @@ email:              omar-irfan@hotmail.com
 author:             Omar Irfan Khan
 baseurl:            "/"
 url:                "https://omarirfa.github.io"
-
+future: true
 # Social Profiles
 twitter_username:   Oi_Khan
 github_username:    omarirfa

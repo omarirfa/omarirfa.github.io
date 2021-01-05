@@ -1,0 +1,138 @@
+---
+layout: post
+title: "Twitter trends"
+#subtitle: ""
+date: 2021-01-05 
+background: '/img/twittertable.jpg'
+---
+
+<p>In this day and age, social media platforms like twitter, facebook, instagram and more have troves of data waiting to be analyzed. In this project, I used twitter data. There is data in many forms that can be analyzed such as what users are tweeting from a specific country, what is the most common device being tweeted from and what are the current trends to name a few. I decided to make a simple application which displays the top ten hashtags for that day. To do this, I had to sign up on twitter to get the access tokens and consumer secrets. Twitter is currently still rolling out their v2.0 I decided to use v1.1 for my application.</p>
+
+<p>Doing some maintenance on the EC2 instance so it will not refresh and show the current results. The results refresh every 6 hours.</p>
+
+
+<h2>Objectives</h2>
+<ul>
+<li>Devise a method to filter messages based on "#"</li>
+<li>Create a pipeline to set up streaming between ec2 -> s3 -> elasticbeanstalk. </li>
+<li>Produce a real time dashboard which shows what is trending. </li>
+</ul>
+
+
+
+<h2>Libraries</h2>
+Some of the tools required to make this project work:
+<ul>
+<li> <a href="https://tweepy.readthedocs.io/en/latest/getting_started.html" style="color:blue">Tweepy</a> - Twitter streaming API which allows for tweet manipulation, which location to get the tweets from and more.</li>
+<li> <a href="https://github.com/apache/spark" style="color:blue">Pyspark</a> - A python version of Apache Spark that allows for handling of streaming data and performing analytics.</li>
+<li> <a href="https://hadoop.apache.org/" style="color:blue">Hadoop</a> -  Hadoop is another big data tool that can be used for analytics or for storing data.</li>
+<li> <a href="https://github.com/steveloughran/winutils" style="color:blue">Winutils</a> - Contains hadoop libraries to run effectively on windows.</li>
+<li> <a href="https://www.chartjs.org/" style="color:blue">Chart.js</a> - Minimalistic javascript charting application to plot nice charts with minimal code.</li>
+<li> <a href="https://flask.palletsprojects.com/en/1.1.x/" style="color:blue">Flask</a> - Allows the development of a web application which can be accessed publicly.</li>
+<li> <a href="https://aws.amazon.com/cli/" style="color:blue">AWS CLI</a> - Helps to communicate with AWS products such as s3, ec2, elasticbeanstalk and more.</li>
+<li> <a href="https://docs.python.org/3/library/socket.html" style="color:blue">Socket</a> - Utilized to easily connect two nodes to communicate.</li>
+<li> <a href="https://man7.org/linux/man-pages/man5/crontab.5.html" style="color:blue">Cron</a> - A linux / UNIX tool used for scheduling jobs. Files such as crontab contains instructions to for cron to execute.</li>
+</ul>
+
+<h2>Method</h2>
+<p>Tweepy streamlistener class was used to set up the streaming process. There were some additional commands added to get the extended tweet text and filter based on language which were added. A local socket was created to start the streaming on the EC2 instance. I decided to use spark streaming rather than structured streaming since we are not building an ideal application and due to AWS free tier restrictions. Furthermore, spark sets up a DStream using sockettextstream to fetch the tweepy streaming data for further processing. In spark, we split the data based on lines and filter with respect to number of hashtags. This is done using the rdd and sql_context. The processed data is then sent as a .csv to be stored in s3 for the specific day and streamed to the flask instance running on elastic beanstalk. Finally, cron is used to automate script running every 6 hours, cleaning up residual checkpoints made by spark (if any) and moving .csv files to s3.</p>
+
+<p>Ideally, we can use kafka or amazon kinesis to help facilitate streaming the data, spark for processing on multiple clusters and storing the data in one of Amazons databases.</p>
+
+
+<h2>Block Diagram & Dashboard</h2>
+<p>In order to not show a blank dashboard, it shows the most recent hashtags from the .csv file stored in s3 till it gets updated after 6 hours. The # represents the number of tweets that were unique but, did not repeat therefore, were not shown in the trending hashtags graph.</p>
+
+<div class="row">
+  <div class="column" id="demobox">
+    <img src="/img/awssparkflow.png" alt="awssparkfloww" style="width:100%">
+  </div>
+  <div class="column">
+    <iframe src="http://twiflas-env.eba-3hspt5is.ca-central-1.elasticbeanstalk.com/" width="200%" height="600" style="border:none;">
+</iframe>
+  </div>
+</div>
+
+You can find more info on <a href="https://github.com/omarirfa/twitter-trend" style="color:blue">Github.</a></p>
+
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+}
+
+/* Create three equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 5px;
+}
+
+
+
+.aligncenter {
+    text-align: center;
+}
+#demobox {
+  background-color: #FFFAFA;
+  padding: 10px ;
+  
+} 
+	
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  box-sizing: border-box;
+}
+.zoom2 {
+  padding: 50px;
+  background-color: white;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.zoom2:hover {
+  -ms-transform: scale(3); /* IE 9 */
+  -webkit-transform: scale(3); /* Safari 3-8 */
+  transform: scale(3); 
+}
+
+  box-sizing: border-box;
+.zoom {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom:hover {
+  -ms-transform: scale(2.5); /* IE 9 */
+  -webkit-transform: scale(2.5); /* Safari 3-8 */
+  transform: scale(2.5); 
+}
+
+  box-sizing: border-box;
+.zoom3 {
+  padding: 50px;
+  transition: transform .2s;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+
+.zoom3:hover {
+  -ms-transform: scale(5); /* IE 9 */
+  -webkit-transform: scale(5); /* Safari 3-8 */
+  transform: scale(5); 
+}
+</style>
+</head>
