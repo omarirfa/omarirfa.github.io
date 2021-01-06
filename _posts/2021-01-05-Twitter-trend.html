@@ -37,7 +37,7 @@ Some of the tools required to make this project work:
 <h2>Method</h2>
 <p>Tweepy streamlistener class was used to set up the streaming process. There were some additional commands added to get the extended tweet text and filter based on language which were added. A local socket was created to start the streaming on the EC2 instance. I decided to use spark streaming rather than structured streaming since we are not building an ideal application and due to AWS free tier restrictions. Furthermore, spark sets up a DStream using sockettextstream to fetch the tweepy streaming data for further processing. In spark, we split the data based on lines and filter with respect to number of hashtags. This is done using the rdd and sql_context. The processed data is then sent as a .csv to be stored in s3 for the specific day and streamed to the flask instance running on elastic beanstalk. Finally, cron is used to automate script running every 6 hours, cleaning up residual checkpoints made by spark (if any) and moving .csv files to s3.</p>
 
-<p>Ideally, we can use kafka or amazon kinesis to help facilitate streaming the data, spark for processing on multiple clusters and storing the data in one of Amazons databases.</p>
+<p>Ideally, we can use kafka or amazon kinesis to help facilitate streaming the data, spark structured streaming for processing on multiple clusters and storing the data in one of Amazons databases.</p>
 
 
 <h2>Block Diagram & Dashboard</h2>
@@ -45,10 +45,10 @@ Some of the tools required to make this project work:
 
 <div class="row">
   <div class="column" id="demobox">
-    <img src="/img/awssparkflow.png" alt="awssparkfloww" style="width:100%">
+    <img src="/img/block_diagram.png" alt="awssparkfloww" style="width:100%">
   </div>
   <div class="column">
-    <iframe src="http://twiflas-env.eba-3hspt5is.ca-central-1.elasticbeanstalk.com/" width="200%" height="600" style="border:none;">
+    <img src="/img/dashboard.png" style="width=100%" alt="dashboard">
 </iframe>
   </div>
 </div>
